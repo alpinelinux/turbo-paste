@@ -1,21 +1,30 @@
 #!/usr/bin/env luajit
 
+-- configuration
+-- salt: used to create a hash based on current counter
+-- url: the url to access the appliation
+-- port: the port number use by turbo http server
+local conf = {
+    salt = "CHANGE ME!",
+    url = "http://172.16.3.80:8888/",
+    port = 8888
+}
+
+-- no changes after here if you dont know what you are doing
+
 local turbo = require("turbo")
 local turboredis = require("turboredis")
-local yield = coroutine.yield
 local hashids = require("hashids")
 
--- some variables
-local salt = "CHANGE ME!"
-local url = "http://172.16.3.80:8888/"
+local yield = coroutine.yield
 
 -- setup redis connection
 local redis = turboredis.Connection:new()
 
--- create tempplate helper
+-- create mustage template helper
 local tpl = turbo.web.Mustache.TemplateHelper("./tpl")
 
-
+-- General handler
 local PasteHandler = class("PasteHandler", turbo.web.RequestHandler)
 
 -- get post and store in redis
@@ -23,23 +32,24 @@ function PasteHandler:post()
     -- This handler takes one POST argument.
     local paste = self:get_argument("tpaste", "")
     if paste == "" then
+        self:set_status(400)
         self:write("No data received!")
     else
-	-- counter is used for statistical usage
-	-- and to generate an unique redis key(hash)
-	local counter = yield(redis:incr("counter"))
-	-- create a hash from the counter
-	local h = hashids.new(salt, 4)
-	local hash = h:encode(counter)
-	-- write the paste to redis
-	yield(redis:set(hash, paste))
-	self:write(url .. hash)
+        -- counter is used for statistical usage
+        -- and to generate an unique redis key(hash)
+        local counter = yield(redis:incr("counter"))
+        -- create a hash from the counter
+        local h = hashids.new(conf.salt, 4)
+        local hash = h:encode(counter)
+        -- write the paste to redis
+        yield(redis:set(hash, paste))
+        self:write(conf.url .. hash)
     end
 end
 
 -- display index page
 function PasteHandler:get()
-    self:write(tpl:render("index.tpl", {url = url}))
+    self:write(tpl:render("index.tpl", {url = conf.url}))
 end
 
 -- handler to display paste
@@ -63,6 +73,5 @@ end)
 turbo.web.Application({
     {"^/$", PasteHandler},
     {"^/(%w*)$", GetPasteHandler}
-}):listen(8888)
+}):listen(conf.port)
 turbo.ioloop.instance():start()
-
