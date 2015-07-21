@@ -1,2 +1,2 @@
 # turbo-paste
-Turbo paste
+Turbo paste a.k.a tpaste
