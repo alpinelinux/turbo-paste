@@ -56,8 +56,13 @@ local GetPasteHandler = class("GetPasteHandler", turbo.web.RequestHandler)
 
 function GetPasteHandler:get(hash)
     local paste = yield(redis:get(hash, paste))
-    self:add_header("Content-Type", "text/plain; charset=UTF-8")
-    self:write(paste)
+    local hl = self:get_argument("hl", false)
+    if hl == "true" then
+        self:write(tpl:render("highlight.tpl", {paste = paste}))
+    else
+        self:add_header("Content-Type", "text/plain; charset=UTF-8")
+        self:write(paste)
+    end
 end
 
 -- new redis connection
