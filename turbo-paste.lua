@@ -42,7 +42,7 @@ function PasteHandler:post()
         local hash = h:encode(counter)
         -- write the paste to redis
         yield(redis:set(hash, paste))
-        self:write(conf.url .. hash)
+        self:write(conf.url .. hash .. "\n")
     end
 end
 
