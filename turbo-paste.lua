@@ -32,8 +32,7 @@ function PasteHandler:post()
     -- This handler takes one POST argument.
     local paste = self:get_argument("tpaste", "")
     if paste == "" then
-        self:set_status(400)
-        self:write("No data received!")
+        error(turbo.web.HTTPError(400, "No data received!"))
     else
         -- counter is used for statistical usage
         -- and to generate an unique redis key(hash)
