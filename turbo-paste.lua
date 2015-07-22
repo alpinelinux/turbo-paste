@@ -76,6 +76,7 @@ end)
 -- turbo http
 turbo.web.Application({
     {"^/$", PasteHandler},
-    {"^/(%w*)$", GetPasteHandler}
+    {"^/(%w*)$", GetPasteHandler},
+    {"/favicon.ico$", turbo.web.StaticFileHandler, "favicon.ico"}
 }):listen(conf.port)
 turbo.ioloop.instance():start()
