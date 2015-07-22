@@ -4,7 +4,7 @@
 -- salt: used to create a hash based on current counter
 -- url: the url to access the appliation
 -- port: the port number use by turbo http server
--- address: ip or histname to listen on
+-- address: ip or hostname to listen on
 -- kwargs: arguments passed on to HTTPServer
 local conf = {
     salt = "CHANGE ME!",
