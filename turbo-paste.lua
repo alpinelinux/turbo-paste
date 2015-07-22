@@ -32,18 +32,17 @@ function PasteHandler:post()
     -- This handler takes one POST argument.
     local paste = self:get_argument("tpaste", "")
     if paste == "" then
-        error(turbo.web.HTTPError(400, "No data received!"))
-    else
-        -- counter is used for statistical usage
-        -- and to generate an unique redis key(hash)
-        local counter = yield(redis:incr("counter"))
-        -- create a hash from the counter
-        local h = hashids.new(conf.salt, 4)
-        local hash = h:encode(counter)
-        -- write the paste to redis
-        yield(redis:set(hash, paste))
-        self:write(conf.url .. hash .. "\n")
+        error(turbo.web.HTTPError(400, "400 No data received."))
     end
+    -- counter is used for statistical usage
+    -- and to generate an unique redis key(hash)
+    local counter = yield(redis:incr("counter"))
+    -- create a hash from the counter
+    local h = hashids.new(conf.salt, 4)
+    local hash = h:encode(counter)
+    -- write the paste to redis
+    yield(redis:set(hash, paste))
+    self:write(conf.url .. hash .. "\n")
 end
 
 -- display index page
@@ -56,6 +55,9 @@ local GetPasteHandler = class("GetPasteHandler", turbo.web.RequestHandler)
 
 function GetPasteHandler:get(hash)
     local paste = yield(redis:get(hash, paste))
+    if not paste then
+	error(turbo.web.HTTPError(404, "404 Not found."))
+    end
     local hl = self:get_argument("hl", false)
     if hl == "true" then
         self:write(tpl:render("highlight.tpl", {paste = paste}))
@@ -69,7 +71,7 @@ end
 turbo.ioloop.instance():add_callback(function()
     local ok = yield(redis:connect())
     if not ok then
-        error("Could not connect to Redis")
+        error(turbo.web.HTTPError(501, "501 Could not connect to backend."))
     end
 end)
 
