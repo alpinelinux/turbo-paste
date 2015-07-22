@@ -18,7 +18,7 @@ SYNOPSIS
 
 DESCRIPTION
     use <a href='data:text/html,<form action="{{{url}}}" method="POST" accept-charset="UTF-8"><textarea name="tpaste" cols="80" rows="24"></textarea><br><button type="submit">paste</button></form>'>this form</a> to paste from a browser
-    add ?hl=true to resulting url for highlightjs.js syntax highlighting via cdnjs
+    add ?hl=true to resulting url for highlight.js syntax highlighting via cdnjs
 
 EXAMPLES
     ~$ cat bin/ching | curl -F 'tpaste=&lt;-' {{{url}}}
