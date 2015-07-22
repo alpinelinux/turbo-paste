@@ -12,7 +12,7 @@ local conf = {
     port = 8888,
     address = "0.0.0.0",
     kwargs = {
-        max_body_size=1024*1024*8
+        max_body_size=1024*1024*1
     }
 }
 
