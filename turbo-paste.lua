@@ -4,10 +4,16 @@
 -- salt: used to create a hash based on current counter
 -- url: the url to access the appliation
 -- port: the port number use by turbo http server
+-- address: ip or histname to listen on
+-- kwargs: arguments passed on to HTTPServer
 local conf = {
     salt = "CHANGE ME!",
     url = "http://172.16.3.80:8888/",
-    port = 8888
+    port = 8888,
+    address = "0.0.0.0",
+    kwargs = {
+        max_body_size=1024*1024*8
+    }
 }
 
 -- no changes after here if you dont know what you are doing
@@ -80,5 +86,5 @@ turbo.web.Application({
     {"^/$", PasteHandler},
     {"^/(%w*)$", GetPasteHandler},
     {"/favicon.ico$", turbo.web.StaticFileHandler, "favicon.ico"}
-}):listen(conf.port)
+}):listen(conf.port, conf.ip, conf.kwargs)
 turbo.ioloop.instance():start()
