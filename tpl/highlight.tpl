@@ -13,9 +13,7 @@
     </head>
     <body>
         <pre>
-<code>
-{{{paste}}}
-</code>
+<code>{{{paste}}}</code>
         </pre>
     </body>
 </html>
