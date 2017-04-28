@@ -11,7 +11,7 @@ Differences compared to sprunge:
 
 Requirements:
 
-* [Turbo lua] (http://www.turbolua.org/)
-* [Redis] (http://redis.io/)
-* [TurboRedis] (http://enotodden.github.io/turboredis/)
-* [Hashids lua] (https://github.com/leihog/hashids.lua)
+* [Turbo lua](http://www.turbolua.org/)
+* [Redis](http://redis.io/)
+* [TurboRedis](http://enotodden.github.io/turboredis/)
+* [Hashids lua](https://github.com/leihog/hashids.lua)
