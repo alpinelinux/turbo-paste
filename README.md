@@ -1,7 +1,7 @@
 # turbo-paste
-Turbo paste a.k.a tpaste
+Turbo paste a.k.a [tpaste](http://tpaste.us)
 
-Command line pastebin inspired by http://sprunge.us
+Alpine Linux command line pastebin inspired by http://sprunge.us
 
 Differences compared to sprunge:
 
