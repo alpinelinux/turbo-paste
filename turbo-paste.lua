@@ -19,13 +19,11 @@ local conf = {
 -- no changes after here if you dont know what you are doing
 
 local turbo = require("turbo")
-local turboredis = require("turboredis")
 local hashids = require("hashids")
-
-local yield = coroutine.yield
+local redis = require("redis")
 
 -- setup redis connection
-local redis = turboredis.Connection:new()
+local client = redis.connect()
 
 -- create mustage template helper
 local tpl = turbo.web.Mustache.TemplateHelper("./tpl")
@@ -42,12 +40,12 @@ function PasteHandler:post()
     end
     -- counter is used for statistical usage
     -- and to generate an unique redis key(hash)
-    local counter = yield(redis:incr("counter"))
+    local counter = client:incr("counter")
     -- create a hash from the counter
     local h = hashids.new(conf.salt, 4)
     local hash = h:encode(counter)
     -- write the paste to redis
-    yield(redis:set(hash, paste))
+    client:set(hash, paste)
     self:write(conf.url .. hash .. "\n")
 end
 
@@ -60,7 +58,7 @@ end
 local GetPasteHandler = class("GetPasteHandler", turbo.web.RequestHandler)
 
 function GetPasteHandler:get(hash)
-    local paste = yield(redis:get(hash, paste))
+    local paste = client:get(hash, paste)
     if not paste then
 	error(turbo.web.HTTPError(404, "404 Not found."))
     end
@@ -72,14 +70,6 @@ function GetPasteHandler:get(hash)
         self:write(paste)
     end
 end
-
--- new redis connection
-turbo.ioloop.instance():add_callback(function()
-    local ok = yield(redis:connect())
-    if not ok then
-        error(turbo.web.HTTPError(501, "501 Could not connect to backend."))
-    end
-end)
 
 -- turbo http
 turbo.web.Application({
