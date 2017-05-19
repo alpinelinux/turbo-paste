@@ -13,5 +13,5 @@ Requirements:
 
 * [Turbo lua](http://www.turbolua.org/)
 * [Redis](http://redis.io/)
-* [TurboRedis](http://enotodden.github.io/turboredis/)
+* [lua-redis](https://github.com/nrk/redis-lua)
 * [Hashids lua](https://github.com/leihog/hashids.lua)
