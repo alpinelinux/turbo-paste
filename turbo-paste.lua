@@ -1,32 +1,15 @@
 #!/usr/bin/env luajit
 
--- configuration
--- salt: used to create a hash based on current counter
--- url: the url to access the appliation
--- port: the port number use by turbo http server
--- address: ip or hostname to listen on
--- kwargs: arguments passed on to HTTPServer
-local conf = {
-    salt = "CHANGE ME!",
-    url = "http://172.16.3.80:8888/",
-    port = 8888,
-    address = "0.0.0.0",
-    kwargs = {
-        max_body_size=1024*1024*1
-    }
-}
-
--- no changes after here if you dont know what you are doing
-
 local turbo = require("turbo")
 local hashids = require("hashids")
 local redis = require("redis")
+local conf = require("config")
 
 -- setup redis connection
-local client = redis.connect()
+local client = redis.connect(conf.redis)
 
 -- create mustage template helper
-local tpl = turbo.web.Mustache.TemplateHelper("./tpl")
+local tpl = turbo.web.Mustache.TemplateHelper(conf.templates)
 
 -- General handler
 local PasteHandler = class("PasteHandler", turbo.web.RequestHandler)
@@ -76,5 +59,5 @@ turbo.web.Application({
     {"^/$", PasteHandler},
     {"^/(%w*)$", GetPasteHandler},
     {"/favicon.ico$", turbo.web.StaticFileHandler, "favicon.ico"}
-}):listen(conf.port, conf.ip, conf.kwargs)
+}):listen(conf.port, conf.address, conf.kwargs)
 turbo.ioloop.instance():start()
