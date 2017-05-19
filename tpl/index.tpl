@@ -26,7 +26,7 @@ EXAMPLES
     ~$ firefox {{{url}}}aXZI
 
 SEE ALSO
-    http://github.com/clandmeter/turbo-paste
+    http://github.com/alpinelinux/turbo-paste
 
         </pre>
     </body>
