@@ -65,7 +65,7 @@ end
 -- turbo http
 turbo.web.Application({
     {"^/$", PasteHandler},
-    {"^/form$", PasteFormHandler},
+    {"^/paste$", PasteFormHandler},
     {"^/(%w*)$", GetPasteHandler},
     {"/favicon.ico$", turbo.web.StaticFileHandler, "favicon.ico"}
 }):listen(conf.port, conf.address, conf.kwargs)

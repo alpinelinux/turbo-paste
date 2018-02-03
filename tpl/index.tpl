@@ -17,7 +17,7 @@ SYNOPSIS
     &lt;command&gt; | curl -F 'tpaste=&lt;-' {{{url}}}
 
 DESCRIPTION
-    use <a href='form'>this form</a> to paste from a browser
+    use <a href='paste'>this form</a> to paste from a browser
     add ?hl=true to resulting url for highlight.js syntax highlighting via cdnjs
 
 EXAMPLES
