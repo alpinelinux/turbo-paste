@@ -54,9 +54,18 @@ function GetPasteHandler:get(hash)
     end
 end
 
+-- handler to display paste form
+local PasteFormHandler = class("PasteHandler", turbo.web.RequestHandler)
+
+function PasteFormHandler:get()
+    self:write(tpl:render("form.tpl", {url = conf.url}))
+end
+
+
 -- turbo http
 turbo.web.Application({
     {"^/$", PasteHandler},
+    {"^/form$", PasteFormHandler},
     {"^/(%w*)$", GetPasteHandler},
     {"/favicon.ico$", turbo.web.StaticFileHandler, "favicon.ico"}
 }):listen(conf.port, conf.address, conf.kwargs)

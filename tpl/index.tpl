@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <style> a { text-decoration: none } </style>
         <meta charset="UTF-8">
@@ -17,7 +17,7 @@ SYNOPSIS
     &lt;command&gt; | curl -F 'tpaste=&lt;-' {{{url}}}
 
 DESCRIPTION
-    use <a href='data:text/html,<form action="{{{url}}}" method="POST" accept-charset="UTF-8"><textarea name="tpaste" cols="80" rows="24"></textarea><br><button type="submit">paste</button></form>'>this form</a> to paste from a browser
+    use <a href='form'>this form</a> to paste from a browser
     add ?hl=true to resulting url for highlight.js syntax highlighting via cdnjs
 
 EXAMPLES
