@@ -3,7 +3,28 @@
 local turbo = require("turbo")
 local hashids = require("hashids")
 local redis = require("redis")
-local conf = require("config")
+
+local ok, conf = pcall(require, "config")
+
+function die(msg)
+	turbo.log.error(msg)
+	os.exit(1)
+end
+
+-- allow config to be passed as env variables
+if not ok then
+	conf = {}
+	conf.salt = os.getenv("TPASTE_SALT") or die("Please set salt variable")
+	conf.url = os.getenv("TPASTE_URL") or die("Please set url variable")
+	conf.port = os.getenv("TPASTE_PORT") or 8080
+	conf.address = os.getenv("TPASTE_ADDRESS") or "0.0.0.0"
+	conf.templates = os.getenv("TPASTE_TPL") or "./tpl"
+	conf.kwargs = {}
+	conf.kwargs.max_body_size = os.getenv("TPASTE_MAX_BODY_SIZE") or 1024*1024*1
+	conf.redis = {}
+	conf.redis.host = os.getenv("TPASTE_REDIS_HOST") or "127.0.0.1"
+	conf.redis.port = os.getenv("TPASTE_REDIS_PORT") or 6379
+end
 
 -- setup redis connection
 local client = redis.connect(conf.redis)
