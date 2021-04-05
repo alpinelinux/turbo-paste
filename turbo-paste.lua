@@ -3,6 +3,7 @@
 local turbo = require("turbo")
 local hashids = require("hashids")
 local redis = require("redis")
+local escape = require("turbo.escape")
 
 local ok, conf = pcall(require, "config")
 
@@ -68,7 +69,8 @@ function GetPasteHandler:get(hash)
     end
     local hl = self:get_argument("hl", false)
     if hl == "true" then
-        self:write(tpl:render("highlight.tpl", {paste = paste}))
+        paste_escaped = escape.html_escape(paste)
+        self:write(tpl:render("highlight.tpl", {paste = paste_escaped}))
     else
         self:add_header("Content-Type", "text/plain; charset=UTF-8")
         self:write(paste)
